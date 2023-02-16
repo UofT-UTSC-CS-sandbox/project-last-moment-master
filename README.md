@@ -1,14 +1,37 @@
-Please use this repository for project files.
-
-- Do not publish your project code to a public repository.
-- You must only write your project proposal in this `README.md`
-
-This README.md is to be replaced by your project proposal:
-
 - Project title and team name
-- Your focus (frontend focused or backend focused)
+  - Project title: Skillvitrine
+  - Team name: last-moment-master
+- Your focus (frontend focused or backend focused)：
+  - backend focused
 - Team members with student numbers
-- Description of the web application
+  - Lianting Wang 1007452374
+  - Yawen Zhang 1006739772
+- Description of the web application: 
+  - Our web application is designed to facilitate remote interviews between interviewers and candidates. Interviewers can register for an account on our platform, and once they're registered, they can create unique links to share with candidates for their interviews. Each link can only be used once to ensure the integrity of the interview process.
+  - When setting up the interview, interviewers have the option to pre-set interview questions that will be asked during the session. During the interview, interviewers and candidates can communicate in real time via a chat box accessible from the side of the screen. Interviewers can also use different colors to highlight specific sections of the candidate's code as needed. Interviewers have the ability to view the candidate's real-time status, if allowed by the candidate. Similarly, interviewers can show their status to candidates as needed.
+  - Our web application is designed to provide a seamless, secure and efficient remote interviewing experience for both interviewers and candidates. With our easy-to-use platform and innovative features, we aim to streamline the interview process and help users find the best talent for their organizations.
 - What complexity points will this project contain
+  - https://www.twilio.com/ complexity points 1
+    - Used to send SMS messages to confirm user identity and push interview-related information
+    - Used to build a video conversation window for both parties
+  - https://sendgrid.com/ complexity points 1
+    - Used to send emails to confirm user identity and push interview-related information
+  - https://developer.mozilla.org/en-US/docs/Web/API/Push_API complexity points 3
+    - Used to push interview-related information to remind users to participate in the interview before it starts
+  - https://github.com/share/sharedb complexity points 2
+    - Used to build code changes can be synchronized in real time after the display and other functions
+  - https://socket.io/ complexity points 1
+    - Used to implement real-time reality and sending of chat boxes
+  - https://auth0.com/ complexity points 1
+    - Used to register and log in users
 - (optional) What complexity points will be attempted as bonus for the challenge factor
+    - We achieved more points(9) than we were asked for(7). Outside of the initial time we would like to achieve CI/CD and hope that this part will help us to get more points.
 - What you aim to complete for the alpha version, beta version, and final version
+  - alpha version
+    - Implementation of the registration function
+    - Real-time code editing and display function
+  - beta version
+    - Realize real-time chat box
+    - Realize the function that both parties can video in real time
+  - final version
+    - Implement all the content in Description and deploy it
