@@ -6,7 +6,7 @@
 - Team members with student numbers
   - Lianting Wang 1007452374
   - Yawen Zhang 1006739772
-- Description of the web application: 
+- Description of the web application:
   - Our web application is designed to facilitate remote interviews between interviewers and candidates. Interviewers can register for an account on our platform, and once they're registered, they can create unique links to share with candidates for their interviews. Each link can only be used once to ensure the integrity of the interview process.
   - When setting up the interview, interviewers have the option to pre-set interview questions that will be asked during the session. During the interview, interviewers and candidates can communicate in real time via a chat box accessible from the side of the screen. Interviewers can also use different colors to highlight specific sections of the candidate's code as needed. Interviewers have the ability to view the candidate's real-time status, if allowed by the candidate. Similarly, interviewers can show their status to candidates as needed.
   - Our web application is designed to provide a seamless, secure and efficient remote interviewing experience for both interviewers and candidates. With our easy-to-use platform and innovative features, we aim to streamline the interview process and help users find the best talent for their organizations.
@@ -25,7 +25,7 @@
   - https://auth0.com/ complexity points 1
     - Used to register and log in users
 - (optional) What complexity points will be attempted as bonus for the challenge factor
-    - We achieved more points(9) than we were asked for(7). Outside of the initial time we would like to achieve CI/CD and hope that this part will help us to get more points.
+  - We achieved more points(9) than we were asked for(7). Outside of the initial time we would like to achieve CI/CD and hope that this part will help us to get more points.
 - What you aim to complete for the alpha version, beta version, and final version
   - alpha version
     - Implementation of the registration function
