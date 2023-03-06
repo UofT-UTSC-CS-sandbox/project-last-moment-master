@@ -20,7 +20,7 @@ try{
 }
 
 app.use(helmet());
-app.use(cors({ origin: 'http://localhost:5000', credentials: true }));
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(expressSession({
     name: sessionName,
     secret: 'Skillvitrine',
@@ -31,10 +31,10 @@ app.set('trust proxy', 1);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use("/users", usersRouter);
+app.use("/api/users", usersRouter);
 
 app.listen(PORT, (err) => {
     if (err) console.log(err);
     else console.log("HTTP server on http://localhost:%s", PORT);
-  });
+});
 

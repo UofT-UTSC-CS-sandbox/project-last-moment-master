@@ -1,4 +1,4 @@
-import express from 'express';
+import jwt from 'jsonwebtoken';
 import auth0 from 'auth0-js';
 import bcrypt from "bcrypt";
 import { Router } from "express";
@@ -29,13 +29,13 @@ usersRouter.post('/signup', (req, res) => {
     return res.status(400).json({ error: "Role is required." });
   }
 
-  User.find({
+  User.findOne({
     where: {
       email: req.body.email,
     },
   }).then((user) => {
     if (user) {
-      return res.status(422).json({ error: "Email already exists." });
+      return res.status(422).json({ error: "HELLO Email already exists." });
     }
     else {
       User.create({
@@ -52,7 +52,7 @@ usersRouter.post('/signup', (req, res) => {
   });
 });
 
-usersRouter.post('/signin', (req, res) => {
+usersRouter.post('/login', (req, res) => {
   User.find({
     where: {
       email: req.body.email,
