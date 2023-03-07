@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import mongoose from 'mongoose';
 import cors from 'cors'
 import expressSession from 'express-session';
-import { usersRouter } from './routes/users.js';
+import { usersRouter } from './src/routes/users.js';
 
 const PORT = 5000;
 const connection = "mongodb+srv://wengzhang0708:SHETOUweng0708@cluster0.m4hzbmi.mongodb.net/?retryWrites=true&w=majority";
