@@ -10,7 +10,6 @@ const url = "http://localhost:3000";
 const domain = "dev-a6l74pvzmwqg5h8s.us.auth0.com";
 const clientID = "OX8IzCO9NRge4U7OT3jTl4T32Wx4a9qu";
 const callbackUrl = "http://localhost:3000/users/callback";
-const secret = "SkillVitrineSecret";
 
 export const usersRouter = Router();
 
@@ -62,7 +61,7 @@ usersRouter.post("/signup", (req, res) => {
                 expiresIn: "2h",
               },
             },
-            secret,
+            process.env.SECRET,
             { algorithm: "HS256" }
           );
           UserJwt.create({
@@ -92,9 +91,7 @@ usersRouter.post("/login", (req, res) => {
         userJwt.isValid &&
         userJwt.updateAt > Date.now() - 2 * 60 * 60 * 1000
       ) {
-        // res.redirect("/mainpage");
-        console.log("login");
-        return res.json({ token: token });
+        return res.json({ token: userJwt.jwt });
       }
     }
   });
@@ -144,12 +141,12 @@ usersRouter.post("/login", (req, res) => {
               expiresIn: "2h",
             },
           },
-          secret,
+          process.env.SECRET,
           { algorithm: "HS256" }
         );
 
         if (userJwt) {
-          //if expired, update the jwt
+          //update the jwt
           UserJwt.updateOne(
             {
               email: user.email,
@@ -158,20 +155,20 @@ usersRouter.post("/login", (req, res) => {
               jwt: token,
               isValid: true,
             }
-          )
-            .then(() => {
+          ),
+            function (err) {
+              if (err) {
+                return res.status(500).json({ error: err });
+              }
               return res.json({ token: token });
-            })
-            .catch((err) => {
-              return res.status(500).json({ error: err });
-            });
+            };
         } else {
           return res.status(500).json({ error: "unknown error" });
         }
       });
     })
     .catch((err) => {
-      res.status(500).json({ error: err });
+      return res.status(500).json({ error: err });
     });
 });
 
