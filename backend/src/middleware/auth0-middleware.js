@@ -1,32 +1,37 @@
-import { auth, claimCheck, InsufficientScopeError, } from "express-oauth2-jwt-bearer";
-import dotenv from "dotenv";
+import {
+  auth,
+  claimCheck,
+  InsufficientScopeError,
+} from "express-oauth2-jwt-bearer";
+import "dotenv";
 
+dotenv.config();
 const validateAccessToken = auth({
-    issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
-    audience: process.env.AUTH0_AUDIENCE,
+  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
+  audience: process.env.AUTH0_AUDIENCE,
 });
 
 const checkRequiredPermissions = (requiredPermissions) => {
-    return (req, res, next) => {
-        const permissionCheck = claimCheck((payload) => {
-            const permissions = payload.permissions || [];
+  return (req, res, next) => {
+    const permissionCheck = claimCheck((payload) => {
+      const permissions = payload.permissions || [];
 
-            const hasRequiredPermissions = requiredPermissions.every((requiredPermission) => 
-                permissions.includes(requiredPermission));
+      const hasRequiredPermissions = requiredPermissions.every(
+        (requiredPermission) => permissions.includes(requiredPermission)
+      );
 
-            if(!hasRequiredPermissions) {
-                throw new InsufficientScopeError();
-            }
+      if (!hasRequiredPermissions) {
+        throw new InsufficientScopeError();
+      }
 
-            return hasRequiredPermissions;
-        });
+      return hasRequiredPermissions;
+    });
 
-        permissionCheck(req, res, next);
-    };
+    permissionCheck(req, res, next);
+  };
 };
 
 module.exports = {
-    validateAccessToken,
-    checkRequiredPermissions,
-  };
-  
+  validateAccessToken,
+  checkRequiredPermissions,
+};
