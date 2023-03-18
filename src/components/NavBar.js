@@ -50,11 +50,11 @@ const NavBar = () => {
               <img
                 className="w-8 h-8 rounded-full"
                 src={user.picture}
-                alt="user photo"
+                alt="user"
               />
             </button>
             <div
-              className="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+              className="absolute top-16 right-5 z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
               id="user-dropdown"
             >
               <div className="px-4 py-3">
@@ -102,7 +102,7 @@ const NavBar = () => {
                     to="/"
                     activeClassName="bg-gray"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    onClick={() => loginWithRedirect({})}
+                    onClick={() => logoutWithRedirect()}
                   >
                     Sign out
                   </NavLink>
