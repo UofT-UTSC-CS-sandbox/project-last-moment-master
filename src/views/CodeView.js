@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Alert } from "reactstrap";
+import { Alert } from "reactstrap";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { getConfig } from "../config";
 import Loading from "../components/Loading";
@@ -120,14 +120,7 @@ export const ExternalApiComponent = () => {
       <CodeArea />
 
       <div className="result-block-container">
-        {state.showResult && (
-          <div className="result-block" data-testid="api-result">
-            <h6 className="muted">Result</h6>
-            <highlight>
-              <span>{JSON.stringify(state.apiMessage, null, 2)}</span>
-            </highlight>
-          </div>
-        )}
+        {state.showResult && <div></div>}
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import ReactDom from "react-dom";
+import React from "react";
 import sharedb from "sharedb/lib/client";
 import Editor from "@monaco-editor/react";
 

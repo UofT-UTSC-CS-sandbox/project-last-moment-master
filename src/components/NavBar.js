@@ -1,29 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import logo from "../assets/logo.svg";
 import { NavLink as RouterNavLink } from "react-router-dom";
 
-import {
-  Collapse,
-  Container,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  Button,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-} from "reactstrap";
+import { NavLink } from "reactstrap";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
 const NavBar = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
-  const toggle = () => setIsOpen(!isOpen);
 
   const logoutWithRedirect = () =>
     logout({
@@ -118,6 +102,7 @@ const NavBar = () => {
                     to="/"
                     activeClassName="bg-gray"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    onClick={() => loginWithRedirect({})}
                   >
                     Sign out
                   </NavLink>
@@ -173,6 +158,18 @@ const NavBar = () => {
                   className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   CodeView
+                </NavLink>
+              </li>
+            )}
+            {isAuthenticated && (
+              <li>
+                <NavLink
+                  tag={RouterNavLink}
+                  to="/profile"
+                  activeClassName="bg-gray"
+                  className="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                  profile
                 </NavLink>
               </li>
             )}

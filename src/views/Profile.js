@@ -23,7 +23,7 @@ export const ProfileComponent = () => {
         </Col>
       </Row>
       <Row>
-        <highlight>{JSON.stringify(user, null, 2)}</highlight>
+        <div>{JSON.stringify(user, null, 2)}</div>
       </Row>
     </Container>
   );
