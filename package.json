@@ -1,0 +1,62 @@
+{
+  "name": "Skillvitrine",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "run-p spa api-server sharedb",
+    "build": "react-scripts build",
+    "spa": "react-scripts start",
+    "server": "node server.js",
+    "server:dev": "nodemon server.js",
+    "api-server": "node api-server.js",
+    "api-server:dev": "nodemon api-server.js",
+    "sharedb": "run-s sharedb-server",
+    "sharedb:dev": "run-s sharedb-server:dev",
+    "sharedb-server": "node sharedb-server.js",
+    "sharedb-server:dev": "nodemon sharedb-server.js",
+    "dev": "run-p spa api-server:dev sharedb:dev"
+  },
+  "dependencies": {
+    "@auth0/auth0-react": "^2.0.0",
+    "@fortawesome/react-fontawesome": "github:fortawesome/react-fontawesome",
+    "@monaco-editor/react": "^4.4.6",
+    "@teamwork/websocket-json-stream": "^2.0.0",
+    "autoprefixer": "^10.4",
+    "cors": "^2.8",
+    "express": "^4.18",
+    "express-jwt": "^8.4.0",
+    "helmet": "^4.4",
+    "jwks-rsa": "^3.0.0",
+    "morgan": "^1.9",
+    "npm-run-all": "^4.1",
+    "react": "^17",
+    "react-dom": "^17",
+    "react-router-dom": "^5.3",
+    "react-scripts": "^5.0",
+    "reactstrap": "^8.0",
+    "reconnecting-websocket": "^4.2.0",
+    "sharedb": "^1.0.0-beta",
+    "tailwindcss": "^3.2.7",
+    "web-vitals": "^2.1.4",
+    "ws": "^7.2.0"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.0",
+    "nodemon": "^2.0"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
