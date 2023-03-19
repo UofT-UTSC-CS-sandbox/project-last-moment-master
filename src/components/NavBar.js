@@ -1,13 +1,13 @@
 import React from "react";
 import logo from "../assets/logo.svg";
 import { NavLink as RouterNavLink } from "react-router-dom";
-
 import { NavLink } from "reactstrap";
-
+import { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const NavBar = () => {
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const [open, setOpen] = useState(false);
 
   const logoutWithRedirect = () =>
     logout({
@@ -43,7 +43,7 @@ const NavBar = () => {
               className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
               id="user-menu-button"
               aria-expanded="false"
-              data-dropdown-toggle="user-dropdown"
+              onClick={ () => setOpen(!open) }
               data-dropdown-placement="bottom"
             >
               <span className="sr-only">Open user menu</span>
@@ -54,15 +54,15 @@ const NavBar = () => {
               />
             </button>
             <div
-              className="absolute top-16 right-5 z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+              className={`${ open ? 'visible' : 'hidden'} absolute top-16 right-5 z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
               id="user-dropdown"
             >
               <div className="px-4 py-3">
                 <span className="block text-sm text-gray-900 dark:text-white">
                   {user.name}
                 </span>
-                <span className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">
-                  name@flowbite.com
+                <span className="block text-sm font-medium text-gray-600 truncate dark:text-gray-400">
+                  {user.nickname}
                 </span>
               </div>
               <ul className="py-2" aria-labelledby="user-menu-button">

@@ -112,9 +112,12 @@ export const ExternalApiComponent = () => {
       </div>
 
       <div className="mt-24">
-        <h1 className="text-center" id="title">
-          Here is the question
+        <h1 className="text-center text-[#e1ecdb] text-3xl font-bold font-mono" id="title">
+          Interview Question
         </h1>
+        <h2 className="text-center text-[#e1ecdb] text-xl font-bold font-mono" id="question-desc">
+          Question description...
+        </h2>
       </div>
 
       <CodeArea />
