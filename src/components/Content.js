@@ -19,6 +19,7 @@ class Content extends Component {
         <h2 className="my-5 text-center text-3xl text-[#f2f6ef] font-bold font-mono">
           A place to showcase your skills
         </h2>
+
       </div>
     );
   }
