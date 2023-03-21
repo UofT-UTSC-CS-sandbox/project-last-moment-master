@@ -4,6 +4,8 @@ import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { getConfig } from "../config";
 import Loading from "../components/Loading";
 import CodeArea from "../components/CodeArea";
+import DescArea from "../components/DescArea";
+import CodeViewFooter from "../components/CodeViewFooter";
 
 export const ExternalApiComponent = () => {
   const { apiOrigin = "http://localhost:3001", audience } = getConfig();
@@ -111,23 +113,15 @@ export const ExternalApiComponent = () => {
         )}
       </div>
 
-      <div className="mt-24">
-        <h1
-          className="text-center text-[#e1ecdb] text-3xl font-bold font-mono"
-          id="title"
-        >
-          Interview Question
-        </h1>
-        <h2
-          className="text-center text-[#e1ecdb] text-xl font-bold font-mono"
-          id="question-desc"
-        >
-          Question description...
-        </h2>
+      <div style={{ display: "flex" }}>
+        <div style={{ flex: 3, overflow: "auto" }}>
+          <CodeArea />
+        </div>
+        <div style={{ flex: 2, overflow: "auto" }}>
+          <DescArea />
+        </div>
       </div>
-
-      <CodeArea />
-
+      <CodeViewFooter />
       <div className="result-block-container">
         {state.showResult && <div></div>}
       </div>

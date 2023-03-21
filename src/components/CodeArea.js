@@ -31,11 +31,12 @@ class CodeArea extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="border-solid border border-[#35472d]">
         <Editor
           height="90vh"
           defaultLanguage="typescript"
           value={this.state.content}
+          theme="vs-dark"
           onChange={this.handleChange}
         />
       </div>
