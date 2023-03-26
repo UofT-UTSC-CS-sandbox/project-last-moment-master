@@ -13,6 +13,7 @@
 
 # misc
 .DS_Store
+.env
 auth_config.json
 .env.local
 .env.development.local

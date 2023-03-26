@@ -5,12 +5,25 @@ const helmet = require("helmet");
 const { expressjwt: jwt } = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
 const authConfig = require("./src/auth_config.json");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
 const app = express();
 
 const port = process.env.API_PORT || 3001;
 const appPort = process.env.SERVER_PORT || 3000;
 const appOrigin = authConfig.appOrigin || `http://localhost:${appPort}`;
+dotenv.config();
+
+try {
+  mongoose.connect(process.env.MONGODB_CONNECTION, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  console.log("Connected to MongoDB");
+} catch (error) {
+  console.log("Could not connect to MongoDB");
+}
 
 if (
   !authConfig.domain ||
