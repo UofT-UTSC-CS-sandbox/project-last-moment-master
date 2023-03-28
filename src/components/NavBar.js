@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/logo.svg";
+import logo from "../assets/logo.png";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { NavLink } from "reactstrap";
 import { useState } from "react";
@@ -145,7 +145,7 @@ const NavBar = () => {
                 tag={RouterNavLink}
                 to="/"
                 activeClassName="bg-gray"
-                className="block py-2 pl-3 pr-4 text-lg rounded md:bg-transparent md:text-[#c8dabc] hover:text-[#f2f6ef] md:p-0 font-mono font-bold"
+                className="block py-2 pl-3 pr-4 text-lg rounded md:bg-transparent md:text-[#c8dabc] hover:text-[#ccdcbe] md:p-0 font-mono font-bold"
                 aria-current="page"
               >
                 Home
@@ -157,7 +157,7 @@ const NavBar = () => {
                   tag={RouterNavLink}
                   to="/codeView"
                   activeClassName="bg-gray"
-                  className="block py-2 pl-3 pr-4 text-[#c8dabc] text-lg rounded hover:text-[#f2f6ef] md:hover:bg-transparent md:p-0 font-mono font-bold"
+                  className="block py-2 pl-3 pr-4 text-[#c8dabc] text-lg rounded hover:text-[#ccdcbe] md:hover:bg-transparent md:p-0 font-mono font-bold"
                 >
                   CodeView
                 </NavLink>
@@ -169,7 +169,7 @@ const NavBar = () => {
                   tag={RouterNavLink}
                   to="/profile"
                   activeClassName="bg-gray"
-                  className="block py-2 pl-3 pr-4 text-[#c8dabc] text-lg rounded hover:text-[#f2f6ef] md:hover:bg-transparent md:p-0 font-mono font-bold"
+                  className="block py-2 pl-3 pr-4 text-[#c8dabc] text-lg rounded hover:text-[#ccdcbe] md:hover:bg-transparent md:p-0 font-mono font-bold"
                 >
                   Profile
                 </NavLink>
