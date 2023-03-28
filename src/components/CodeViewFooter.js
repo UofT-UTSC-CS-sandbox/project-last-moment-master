@@ -20,7 +20,7 @@ class CodeViewFooter extends React.Component {
       <div id="outcome" className="relative">
         {!this.state.menuVisible && (
           <button
-            formType="submit"
+            formtype="submit"
             onClick={this.toggleMenu}
             className="bg-[#85ab70] hover:bg-[#527642] text-[#e1ecdb] font-bold rounded-lg px-6 py-3 drop-shadow-xl fixed bottom-20 left-32"
           >

@@ -112,7 +112,6 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
       </div>
-
       <div style={{ display: "flex" }}>
         <div style={{ flex: 3, overflow: "auto" }}>
           <CodeArea />

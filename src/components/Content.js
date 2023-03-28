@@ -13,10 +13,10 @@ class Content extends Component {
   render() {
     return (
       <div>
-        <h1 className="my-5 text-center mt-80 text-6xl text-[#f2f6ef] font-bold font-mono">
+        <h1 className="my-5 text-center mt-80 text-6xl text-[#ccdcbe] font-bold font-mono">
           Welcome to Skillvitrine
         </h1>
-        <h2 className="my-5 text-center text-3xl text-[#f2f6ef] font-bold font-mono">
+        <h2 className="my-5 text-center text-3xl text-[#ccdcbe] font-bold font-mono">
           A place to showcase your skills
         </h2>
       </div>
