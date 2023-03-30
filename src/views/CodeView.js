@@ -1,23 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Alert } from "reactstrap";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { getConfig } from "../config";
+import sharedb from "sharedb/lib/client";
 import Loading from "../components/Loading";
 import CodeArea from "../components/CodeArea";
 import DescArea from "../components/DescArea";
 import CodeViewFooter from "../components/CodeViewFooter";
 
+const port = process.env.API_PORT || 3002;
+const socket = new WebSocket(`ws://localhost:${port}`);
+const connection = new sharedb.Connection(socket);
+
 export const ExternalApiComponent = () => {
-  const { apiOrigin = "http://localhost:3001", audience } = getConfig();
+  const { apiOrigin = "http://localhost:3001" } = getConfig();
 
   const [state, setState] = useState({
     showResult: false,
     apiMessage: "",
     error: null,
   });
+  const [content, setContent] = useState("");
+  const docRef = React.useRef(null);
 
   const { getAccessTokenSilently, loginWithPopup, getAccessTokenWithPopup } =
     useAuth0();
+
+  const callApi = useCallback(async () => {
+    const token = await getAccessTokenSilently();
+    const response = await fetch(`${apiOrigin}/api/codeViewId`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const responseData = await response.json();
+    return responseData.id;
+  }, [getAccessTokenSilently, apiOrigin]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const doc = connection.get(await callApi(), "textarea");
+      doc.subscribe((err) => {
+        if (err) throw err;
+        setContent(doc.data.content);
+      });
+      doc.on("op", () => {
+        setContent(doc.data.content);
+      });
+      docRef.current = doc;
+      return () => {
+        if (docRef.current) {
+          docRef.current.destroy();
+        }
+      };
+    };
+    return fetchData();
+
+    
+  }, [callApi]);
+
+  const handleChange = (value) => {
+    docRef.current.submitOp([{ p: ["content"], ld: docRef.current.data[0], li: value }]);
+    setContent(value);
+  };
 
   const handleConsent = async () => {
     try {
@@ -32,8 +77,6 @@ export const ExternalApiComponent = () => {
         error: error.error,
       });
     }
-
-    await callApi();
   };
 
   const handleLoginAgain = async () => {
@@ -42,33 +85,6 @@ export const ExternalApiComponent = () => {
       setState({
         ...state,
         error: null,
-      });
-    } catch (error) {
-      setState({
-        ...state,
-        error: error.error,
-      });
-    }
-
-    await callApi();
-  };
-
-  const callApi = async () => {
-    try {
-      const token = await getAccessTokenSilently();
-
-      const response = await fetch(`${apiOrigin}/api/external`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const responseData = await response.json();
-
-      setState({
-        ...state,
-        showResult: true,
-        apiMessage: responseData,
       });
     } catch (error) {
       setState({
@@ -114,13 +130,13 @@ export const ExternalApiComponent = () => {
       </div>
       <div style={{ display: "flex" }}>
         <div style={{ flex: 3, overflow: "auto" }}>
-          <CodeArea />
+          <CodeArea value={content} onChange={handleChange} />
         </div>
         <div style={{ flex: 2, overflow: "auto" }}>
           <DescArea />
         </div>
       </div>
-      <CodeViewFooter />
+      <CodeViewFooter value={content} />
       <div className="result-block-container">
         {state.showResult && <div></div>}
       </div>
