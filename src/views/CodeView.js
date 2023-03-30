@@ -55,12 +55,12 @@ export const ExternalApiComponent = () => {
       };
     };
     return fetchData();
-
-    
   }, [callApi]);
 
   const handleChange = (value) => {
-    docRef.current.submitOp([{ p: ["content"], ld: docRef.current.data[0], li: value }]);
+    docRef.current.submitOp([
+      { p: ["content"], ld: docRef.current.data[0], li: value },
+    ]);
     setContent(value);
   };
 

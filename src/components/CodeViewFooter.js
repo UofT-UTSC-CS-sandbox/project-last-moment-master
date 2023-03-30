@@ -74,6 +74,6 @@ export const CodeViewFooter = (props) => {
       )}
     </div>
   );
-}
+};
 
 export default CodeViewFooter;
