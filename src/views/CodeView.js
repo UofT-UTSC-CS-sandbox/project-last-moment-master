@@ -7,6 +7,7 @@ import Loading from "../components/Loading";
 import CodeArea from "../components/CodeArea";
 import DescArea from "../components/DescArea";
 import CodeViewFooter from "../components/CodeViewFooter";
+import VideoChat from "../components/VideoChat";
 
 const port = process.env.API_PORT || 3002;
 const socket = new WebSocket(`ws://localhost:${port}`);
@@ -137,6 +138,7 @@ export const ExternalApiComponent = () => {
         </div>
       </div>
       <CodeViewFooter value={content} />
+      <VideoChat />
       <div className="result-block-container">
         {state.showResult && <div></div>}
       </div>
