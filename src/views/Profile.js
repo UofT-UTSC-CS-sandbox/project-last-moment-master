@@ -45,14 +45,6 @@ export const ProfileComponent = () => {
         </Col>
       </Row>
       <Row className="mb-8">
-        <button
-          // formtype="submit"
-          // onClick=
-          className="bg-[#85ab70] hover:bg-[#527642] text-[#e1ecdb] font-bold rounded-lg px-6 py-3 drop-shadow-xl left-40"
-        >
-          {/* not impelmented yet */}
-          Change profile picture
-        </button>
         <div className="bg-[#a5c392] rounded-lg w-64 h-48 px-4 ring-1 ring-[#588742] shadow-xl">
           <h2 className="text-[#345427] text-lg mt-8 font-bold font-mono text-center">
             {user.nickname}

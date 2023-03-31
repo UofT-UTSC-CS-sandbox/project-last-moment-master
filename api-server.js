@@ -8,7 +8,6 @@ const jwksRsa = require("jwks-rsa");
 const authConfig = require("./src/auth_config.json");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const socket = require("socket.io");
 const axios = require("axios");
 
 const app = express();
@@ -16,18 +15,7 @@ const app = express();
 dotenv.config();
 const port = process.env.API_PORT || 3001;
 const appPort = process.env.SERVER_PORT || 3000;
-const socketPort = process.env.SOCKET_PORT || 3003;
 const appOrigin = authConfig.appOrigin || `http://localhost:${appPort}`;
-
-const server = require("http").createServer(app);
-
-const io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-  },
-});
-
-dotenv.config();
 
 const XRapidAPIKey = process.env.XRAPIKEY;
 const XRapidAPIHost = process.env.XRAPIHOST;
@@ -75,27 +63,6 @@ const checkJwt = jwt({
 app.get("/api/external", checkJwt, (req, res) => {
   res.send({
     msg: "Your access token was successfully validated!",
-  });
-});
-
-
-io.on("connection", (socket) => {
-  socket.emit("me", socket.id);
-
-  socket.on("disconnect", () => {
-    socket.broadcast.emit("callEnded");
-  });
-
-  socket.on("callUser", (data) => {
-    io.to(data.userToCall).emit("callUser", {
-      signal: data.signalData,
-      from: data.from,
-      name: data.name,
-    });
-  });
-
-  socket.on("answerCall", (data) => {
-    io.to(data.to).emit("callAccepted", data.signal);
   });
 });
 
@@ -151,6 +118,3 @@ app.post("/api/execute", checkJwt, (req, res) => {
 });
 
 app.listen(port, () => console.log(`API Server listening on port ${port}`));
-server.listen(socketPort, () => {
-  console.log(`socket server is running on port ${socketPort}`);
-});

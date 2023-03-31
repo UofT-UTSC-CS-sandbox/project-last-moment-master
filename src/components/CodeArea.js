@@ -1,11 +1,11 @@
 import React from "react";
 import sharedb from "sharedb/lib/client";
 import Editor from "@monaco-editor/react";
+import { ThemeContext } from "../context/ThemeContext";
 
-const port = process.env.API_PORT || 3002;
+const port = 3002;
 const socket = new WebSocket(`ws://localhost:${port}`);
 const connection = new sharedb.Connection(socket);
-
 
 class CodeArea extends React.Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class CodeArea extends React.Component {
     this.doc.submitOp([{ p: ["content"], ld: this.doc.data[0], li: value }]);
     this.setState({ content: value });
   };
-  
+
   render() {
     return (
       <ThemeContext.Consumer>
@@ -41,7 +41,6 @@ class CodeArea extends React.Component {
               value={this.props.value}
               theme="vs-dark"
               onChange={this.props.onChange}
-
             />
           </div>
         )}
