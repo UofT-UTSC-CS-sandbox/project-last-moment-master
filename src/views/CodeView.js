@@ -6,6 +6,7 @@ import Loading from "../components/Loading";
 import CodeArea from "../components/CodeArea";
 import DescArea from "../components/DescArea";
 import CodeViewFooter from "../components/CodeViewFooter";
+import VideoChat from "../components/VideoChat";
 
 export const ExternalApiComponent = () => {
   const { apiOrigin = "http://localhost:3001", audience } = getConfig();
@@ -121,6 +122,7 @@ export const ExternalApiComponent = () => {
         </div>
       </div>
       <CodeViewFooter />
+      <VideoChat />
       <div className="result-block-container">
         {state.showResult && <div></div>}
       </div>
