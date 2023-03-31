@@ -1,37 +1,44 @@
-- Project title and team name
-  - Project title: Skillvitrine
-  - Team name: last-moment-master
-- Your focus (frontend focused or backend focused)：
-  - backend focused
-- Team members with student numbers
-  - Lianting Wang 1007452374
-  - Yawen Zhang 1006739772
-- Description of the web application:
-  - Our web application is designed to facilitate remote interviews between interviewers and candidates. Interviewers can register for an account on our platform, and once they're registered, they can create unique links to share with candidates for their interviews. Each link can only be used once to ensure the integrity of the interview process.
-  - When setting up the interview, interviewers have the option to pre-set interview questions that will be asked during the session. During the interview, interviewers and candidates can communicate in real time via a chat box accessible from the side of the screen. Interviewers can also use different colors to highlight specific sections of the candidate's code as needed. Interviewers have the ability to view the candidate's real-time status, if allowed by the candidate. Similarly, interviewers can show their status to candidates as needed.
-  - Our web application is designed to provide a seamless, secure and efficient remote interviewing experience for both interviewers and candidates. With our easy-to-use platform and innovative features, we aim to streamline the interview process and help users find the best talent for their organizations.
-- What complexity points will this project contain
-  - https://www.twilio.com/ complexity points 1
-    - Used to send SMS messages to confirm user identity and push interview-related information
-    - Used to build a video conversation window for both parties
-  - https://sendgrid.com/ complexity points 1
-    - Used to send emails to confirm user identity and push interview-related information
-  - https://developer.mozilla.org/en-US/docs/Web/API/Push_API complexity points 3
-    - Used to push interview-related information to remind users to participate in the interview before it starts
-  - https://github.com/share/sharedb complexity points 2
-    - Used to build code changes can be synchronized in real time after the display and other functions
-  - https://socket.io/ complexity points 1
-    - Used to implement real-time reality and sending of chat boxes
-  - https://auth0.com/ complexity points 1
-    - Used to register and log in users
-- (optional) What complexity points will be attempted as bonus for the challenge factor
-  - We achieved more points(9) than we were asked for(7). Outside of the initial time we would like to achieve CI/CD and hope that this part will help us to get more points.
-- What you aim to complete for the alpha version, beta version, and final version
-  - alpha version
-    - Implementation of the registration function
-    - Real-time code editing and display function
-  - beta version
-    - Realize real-time chat box
-    - Realize the function that both parties can video in real time
-  - final version
-    - Implement all the content in Description and deploy it
+# Skillvitrine - A Remote Interviewing Platform
+**Team Name:** Last-Moment-Master
+
+## Overview
+**Focus:** Frontend
+
+**Team Members:**
+- Yawen Zhang (1006739772)
+
+## Project Description
+Skillvitrine is a web application designed to facilitate remote interviews between interviewers and candidates. It offers a seamless, secure, and efficient remote interviewing experience by providing the following features:
+
+- Account registration for interviewers
+- Unique, single-use interview links
+
+- Code highlighting with different colors
+- Real-time status sharing (if permitted)
+
+## Technical Complexity Points
+1. [Simple Peer](https://github.com/feross/simple-peer) - Video conversation window (1 point)
+2. [ShareDB](https://github.com/share/sharedb) - Real-time code synchronization and display (2 points)
+3. [Socket.io](https://socket.io/) - Real-time chat box (1 point)
+4. [Auth0](https://auth0.com/) - User registration and login (1 point)
+
+**Total Points:** 5
+
+## Bonus Complexity Points
+I plan to implement CI/CD for an extra challenge and hope to earn more points.
+
+## Development Milestones
+**Alpha Version:**
+- User registration implementation
+- Real-time code editing and display functionality
+
+**Beta Version:**
+- Beautify UI
+- Real-time video for both parties
+
+**Final Version:**
+- Implement all features described in the project description
+- Deploy the application
+
+## Video Presentation
+[Watch our presentation on YouTube](https://www.youtube.com/watch?v=e5UW5pq7tng)
