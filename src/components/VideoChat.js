@@ -38,16 +38,6 @@ const VideoChat = () => {
       setName(data.name);
       setCallerSignal(data.signal);
     });
-
-    // socket.on("callEnded", () => {
-    //   console.log("callEnded");
-    //   setCallEnded(true);
-    //   setCallAccepted(false);
-    //   setReceivingCall(false);
-    //   if (connectionRef.current) {
-    //     connectionRef.current.destroy();
-    //   }
-    // });
   }, []);
 
   useEffect(() => {
@@ -113,7 +103,7 @@ const VideoChat = () => {
     setCallAccepted(false);
     setReceivingCall(false);
     if (connectionRef.current) {
-      console.log(connectionRef.current);
+      connectionRef.current = null;
     }
   };
 
