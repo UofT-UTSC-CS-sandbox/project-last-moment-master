@@ -100,7 +100,11 @@ const VideoChat = () => {
 
   const leaveCall = () => {
     setCallEnded(true);
-    connectionRef.current.destroy();
+    setCallAccepted(false);
+    setReceivingCall(false);
+    if (connectionRef.current) {
+      connectionRef.current = null;
+    }
   };
 
   return (
@@ -136,7 +140,7 @@ const VideoChat = () => {
             {callAccepted && !callEnded ? (
               <button
                 onClick={leaveCall}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold font-mono rounded-lg px-6 py-3 drop-shadow-xl fixed bottom-20 left-32"
+                className="bg-red-500 hover:bg-red-700 text-white font-bold font-mono rounded-lg px-6 py-3 drop-shadow-xl fixed bottom-20 left-52"
               >
                 End Call
               </button>
@@ -148,7 +152,6 @@ const VideoChat = () => {
                 Call
               </button>
             )}
-            {idToCall}
           </div>
         </div>
         <div>
