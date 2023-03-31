@@ -2,16 +2,18 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const helmet = require("helmet");
+const bodyParser = require("body-parser");
 const { expressjwt: jwt } = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
 const authConfig = require("./src/auth_config.json");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const { v4: uuidV4 } = require("uuid");
 const socket = require("socket.io");
+const axios = require("axios");
 
 const app = express();
 
+dotenv.config();
 const port = process.env.API_PORT || 3001;
 const appPort = process.env.SERVER_PORT || 3000;
 const socketPort = process.env.SOCKET_PORT || 3003;
@@ -26,6 +28,9 @@ const io = require("socket.io")(server, {
 });
 
 dotenv.config();
+
+const XRapidAPIKey = process.env.XRAPIKEY;
+const XRapidAPIHost = process.env.XRAPIHOST;
 
 try {
   mongoose.connect(process.env.MONGODB_CONNECTION, {
@@ -49,6 +54,7 @@ if (
   process.exit();
 }
 
+app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(cors({ origin: appOrigin }));
@@ -72,13 +78,6 @@ app.get("/api/external", checkJwt, (req, res) => {
   });
 });
 
-app.get("/api/rooms", checkJwt, (req, res) => {
-  res.redirect(`/${uuidV4()}`);
-});
-
-app.get("/api/rooms/:room", checkJwt, (req, res) => {
-  res.send({ roomId: req.params.room });
-});
 
 io.on("connection", (socket) => {
   socket.emit("me", socket.id);
@@ -100,6 +99,56 @@ io.on("connection", (socket) => {
   });
 });
 
+app.get("/api/codeViewId", checkJwt, (req, res) => {
+  res.send({
+    id: "examples",
+  });
+});
+
+app.post("/api/execute", checkJwt, (req, res) => {
+  const value = Buffer.from(req.body.code, "utf-8");
+  const valueB64 = value.toString("base64");
+  const inputOptions = {
+    method: "POST",
+    url: "https://judge0-ce.p.rapidapi.com/submissions/",
+    params: { base64_encoded: "true", fields: "*", wait: "true" },
+    headers: {
+      "content-type": "application/json",
+      "Content-Type": "application/json",
+      "X-RapidAPI-Key": XRapidAPIKey,
+      "X-RapidAPI-Host": XRapidAPIHost,
+    },
+    data: `{"language_id":63,"source_code":"${valueB64}","stdin":""}`,
+  };
+  axios
+    .request(inputOptions)
+    .then(function (response) {
+      const results = response.data;
+      console.log(results.token);
+      const outputOptions = {
+        method: "GET",
+        url: `https://judge0-ce.p.rapidapi.com/submissions/${results.token}`,
+        params: { base64_encoded: "true", fields: "*" },
+        headers: {
+          "X-RapidAPI-Key": XRapidAPIKey,
+          "X-RapidAPI-Host": XRapidAPIHost,
+        },
+      };
+      axios
+        .request(outputOptions)
+        .then(function (response) {
+          const resultsB64 = Buffer.from(response.data.stdout, "base64");
+          const results = resultsB64.toString("utf-8");
+          res.send({ results });
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+});
 
 app.listen(port, () => console.log(`API Server listening on port ${port}`));
 server.listen(socketPort, () => {
