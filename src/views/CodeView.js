@@ -22,6 +22,7 @@ export const ExternalApiComponent = () => {
     error: null,
   });
   const [content, setContent] = useState("");
+  const [showVideo, setShowVideo] = useState(false);
   const docRef = React.useRef(null);
 
   const { getAccessTokenSilently, loginWithPopup, getAccessTokenWithPopup } =
@@ -129,8 +130,20 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
       </div>
-      <div style={{ display: "flex" }}>
+      <button 
+        className="bg-[#85ab70] hover:bg-[#527642] text-[#e1ecdb] font-bold font-mono rounded-lg px-6 py-3 drop-shadow-xl"
+        onClick={() => setShowVideo(!showVideo)}
+      >
+        {showVideo ? "Hide" : "Show"} Video Chat
+      </button>
+      <div className="mt-4" style={{ display: "flex" }}>
         <div style={{ flex: 3, overflow: "auto" }}>
+          {showVideo && 
+            <div className="fixed w-full h-full z-50 flex justify-center items-center"
+            >
+              <VideoChat isopen={showVideo}/>
+            </div>
+          }
           <CodeArea value={content} onChange={handleChange} />
         </div>
         <div style={{ flex: 2, overflow: "auto" }}>
@@ -138,7 +151,6 @@ export const ExternalApiComponent = () => {
         </div>
       </div>
       <CodeViewFooter value={content} />
-      <VideoChat />
       <div className="result-block-container">
         {state.showResult && <div></div>}
       </div>

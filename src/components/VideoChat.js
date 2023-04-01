@@ -5,7 +5,7 @@ import Draggable from "react-draggable";
 import ClipboardJS from "clipboard";
 
 const socket = io.connect("http://localhost:3003");
-const VideoChat = () => {
+const VideoChat = ({ isopen }) => {
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
@@ -21,23 +21,35 @@ const VideoChat = () => {
   const connectionRef = useRef();
 
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        setStream(stream);
-        myVideo.current.srcObject = stream;
-      });
+    if (isopen) {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: true })
+        .then((stream) => {
+          setStream(stream);
+          myVideo.current.srcObject = stream;
+        });
 
-    socket.on("me", (id) => {
-      setMe(id);
-    });
+        socket.on("me", (id) => {
+          setMe(id);
+        });
+    
+        socket.on("callUser", (data) => {
+          setReceivingCall(true);
+          setCaller(data.from);
+          setName(data.name);
+          setCallerSignal(data.signal);
+        });
 
-    socket.on("callUser", (data) => {
-      setReceivingCall(true);
-      setCaller(data.from);
-      setName(data.name);
-      setCallerSignal(data.signal);
-    });
+        return () => {
+          if (stream) {
+            stream.getTracks().forEach((track) => {
+              track.stop();
+            });
+          }
+        };
+    }
+
+
   }, []);
 
   useEffect(() => {
@@ -116,14 +128,14 @@ const VideoChat = () => {
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="my-8 sborder border-[#ccdcbe] rounded-md font-mono px-3 py-2 w-full focus:outline-none focus:ring focus:border-[#a5c392]"
+            className="my-8 sborder border-[#ccdcbe] rounded-md font-mono px-3 py-2 w-full focus:outline-none focus:ring focus:border-[#a5c392] drop-shadow-xl"
           />
           <button
             id="copyButton"
             type="button"
             data-clipboard-text={me}
             data-clipboard-action="copy"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-bold font-mono py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-8"
+            className="ml-32 bg-blue-500 hover:bg-blue-600 text-white font-bold font-mono py-2 px-4 rounded focus:outline-none focus:shadow-outline mb-8 drop-shadow-xl"
           >
             Copy ID
           </button>
@@ -134,7 +146,7 @@ const VideoChat = () => {
             placeholder="ID to call"
             value={idToCall}
             onChange={(e) => setIdToCall(e.target.value)}
-            className="border border-[#ccdcbe] rounded-md px-3 py-2 w-full focus:outline-none focus:ring focus:border-[#a5c392] font-mono"
+            className="border border-[#ccdcbe] rounded-md px-3 py-2 w-full focus:outline-none focus:ring focus:border-[#a5c392] font-mono drop-shadow-xl"
           />
           <div className="call-button">
             {callAccepted && !callEnded ? (
