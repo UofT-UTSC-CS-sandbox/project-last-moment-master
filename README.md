@@ -26,6 +26,7 @@ Skillvitrine is a web application designed to facilitate remote interviews betwe
 2. [ShareDB](https://github.com/share/sharedb) - Real-time code synchronization and display (2 points)
 3. [Socket.io](https://socket.io/) - Real-time chat box (1 point)
 4. [Auth0](https://auth0.com/) - User registration and login (1 point)
+5. [Judge0](https://judge0-ce.p.rapidapi.com/submissions/) - Online code execution
 
 **Total Points:** 5
 

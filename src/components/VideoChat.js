@@ -43,14 +43,14 @@ const VideoChat = ({ isopen }) => {
         return () => {
           if (stream) {
             stream.getTracks().forEach((track) => {
+              console.log("STOPPING TRACKKKKKKKKKKKKK", track, isopen);
               track.stop();
             });
           }
         };
     }
 
-
-  }, []);
+  }, [isopen]);
 
   useEffect(() => {
     const clipboard = new ClipboardJS("#copyButton");
@@ -111,12 +111,17 @@ const VideoChat = ({ isopen }) => {
   };
 
   const leaveCall = () => {
-    setCallEnded(true);
-    setCallAccepted(false);
-    setReceivingCall(false);
-    if (connectionRef.current) {
-      connectionRef.current = null;
-    }
+    socket.on("callEnded", () => {
+      setCallEnded(true);
+      setCallAccepted(false);
+      setReceivingCall(false);
+      if (connectionRef.current) {
+        console.log("BEFOREEE DISTROYYYYYYYYYYYYY", connectionRef.current);
+        // connectionRef.current.removeStream(stream);
+        userVideo.current.srcObject = null;
+        myVideo.current.srcObject = null;
+      }
+    });
   };
 
   return (
