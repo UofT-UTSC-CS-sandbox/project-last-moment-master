@@ -22,7 +22,6 @@ export const ExternalApiComponent = () => {
     error: null,
   });
   const [content, setContent] = useState("");
-  const [showVideo, setShowVideo] = useState(false);
   const docRef = React.useRef(null);
 
   const { getAccessTokenSilently, loginWithPopup, getAccessTokenWithPopup } =
@@ -130,24 +129,20 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
       </div>
-      <button 
-        className="bg-[#85ab70] hover:bg-[#527642] text-[#e1ecdb] font-bold font-mono rounded-lg px-6 py-3 drop-shadow-xl"
-        onClick={() => setShowVideo(!showVideo)}
+      <div
+        className="fixed mt-28 ml-48 transform -translate-x-1/2 -translate-y-1/2 z-50"
+        style={{ width: "400px", height: "400px" }}
       >
-        {showVideo ? "Hide" : "Show"} Video Chat
-      </button>
-      <div className="mt-4" style={{ display: "flex" }}>
-        <div style={{ flex: 3, overflow: "auto" }}>
-          {showVideo && 
-            <div className="fixed w-full h-full z-50 flex justify-center items-center"
-            >
-              <VideoChat isopen={showVideo}/>
-            </div>
-          }
-          <CodeArea value={content} onChange={handleChange} />
-        </div>
-        <div style={{ flex: 2, overflow: "auto" }}>
-          <DescArea />
+        <VideoChat />
+      </div>
+      <div style={{ position: "relative" }}>
+        <div className="mt-48" style={{ display: "flex" }}>
+          <div style={{ flex: 3, overflow: "auto" }}>
+            <CodeArea value={content} onChange={handleChange} />
+          </div>
+          <div style={{ flex: 2, overflow: "auto" }}>
+            <DescArea />
+          </div>
         </div>
       </div>
       <CodeViewFooter value={content} />
