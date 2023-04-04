@@ -5,6 +5,7 @@ import Draggable from "react-draggable";
 import ClipboardJS from "clipboard";
 
 let socket;
+
 const VideoChat = () => {
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
