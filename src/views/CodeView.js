@@ -129,16 +129,18 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
       </div>
-      <div style={{ display: "flex" }}>
-        <div style={{ flex: 3, overflow: "auto" }}>
-          <CodeArea value={content} onChange={handleChange} />
-        </div>
-        <div style={{ flex: 2, overflow: "auto" }}>
-          <DescArea />
+      <VideoChat />
+      <div style={{ position: "relative" }}>
+        <div className="mt-10" style={{ display: "flex" }}>
+          <div style={{ flex: 3, overflow: "auto" }}>
+            <CodeArea value={content} onChange={handleChange} />
+          </div>
+          <div style={{ flex: 2, overflow: "auto" }}>
+            <DescArea />
+          </div>
         </div>
       </div>
       <CodeViewFooter value={content} />
-      <VideoChat />
       <div className="result-block-container">
         {state.showResult && <div></div>}
       </div>
