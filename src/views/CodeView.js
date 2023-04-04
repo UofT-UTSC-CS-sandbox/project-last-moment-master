@@ -129,14 +129,9 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
       </div>
-      <div
-        className="fixed mt-28 ml-48 transform -translate-x-1/2 -translate-y-1/2 z-50"
-        style={{ width: "400px", height: "400px" }}
-      >
-        <VideoChat />
-      </div>
+      <VideoChat />
       <div style={{ position: "relative" }}>
-        <div className="mt-48" style={{ display: "flex" }}>
+        <div className="mt-10" style={{ display: "flex" }}>
           <div style={{ flex: 3, overflow: "auto" }}>
             <CodeArea value={content} onChange={handleChange} />
           </div>
