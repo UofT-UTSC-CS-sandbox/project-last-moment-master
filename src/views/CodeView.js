@@ -22,6 +22,7 @@ export const ExternalApiComponent = () => {
     error: null,
   });
   const [content, setContent] = useState("");
+  const [codeRoomId, setCodeRoomId] = useState("");
   const docRef = React.useRef(null);
 
   const { getAccessTokenSilently, loginWithPopup, getAccessTokenWithPopup } =
@@ -40,7 +41,8 @@ export const ExternalApiComponent = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const doc = connection.get(await callApi(), "textarea");
+      setCodeRoomId(await callApi());
+      const doc = connection.get(codeRoomId, "textarea");
       doc.subscribe((err) => {
         if (err) throw err;
         setContent(doc.data.content);

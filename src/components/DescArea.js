@@ -10,6 +10,7 @@ class DescArea extends React.Component {
         >
           Interview Question
         </h1>
+        <hr className="border-[#85ab70] dark:border-[#ccdcbe] border mx-2" />
         <h2
           className="text-center text-[#35472d] dark:text-[#ccdcbe] text-xl font-bold font-mono"
           id="question-desc"

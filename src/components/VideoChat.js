@@ -30,16 +30,16 @@ const VideoChat = () => {
           myVideo.current.srcObject = stream;
         });
 
-        socket.on("me", (id) => {
-          setMe(id);
-        });
-    
-        socket.on("callUser", (data) => {
-          setReceivingCall(true);
-          setCaller(data.from);
-          setName(data.name);
-          setCallerSignal(data.signal);
-        });
+      socket.on("me", (id) => {
+        setMe(id);
+      });
+
+      socket.on("callUser", (data) => {
+        setReceivingCall(true);
+        setCaller(data.from);
+        setName(data.name);
+        setCallerSignal(data.signal);
+      });
     } else {
       if (stream) {
         stream.getTracks().forEach((track) => {
@@ -120,13 +120,13 @@ const VideoChat = () => {
     const stopTracks = (stream) => {
       stream.getTracks().forEach((track) => track.stop());
     };
-    
+
     if (connectionRef.current) {
       userVideo.current.srcObject = null;
       myVideo.current.srcObject = null;
       stopTracks(stream);
     }
-    
+
     if (stream) {
       stopTracks(stream);
       setStream(null);
@@ -141,13 +141,13 @@ const VideoChat = () => {
 
   return (
     <div>
-      <button 
+      <button
         className="bg-[#85ab70] hover:bg-[#527642] text-[#e1ecdb] font-bold font-mono rounded-lg px-6 py-3 drop-shadow-xl"
         onClick={() => setIsopen(!isopen)}
       >
         {isopen ? "Hide" : "Show"} Video Chat
       </button>
-      {isopen && 
+      {isopen && (
         <Draggable>
           <div className="bg-[#c8dabc] mt-16 rounded-md drop-shadow-2xl fixed w-full h-full z-100 flex">
             <div id="form">
@@ -228,7 +228,7 @@ const VideoChat = () => {
             </div>
           </div>
         </Draggable>
-      }
+      )}
     </div>
   );
 };

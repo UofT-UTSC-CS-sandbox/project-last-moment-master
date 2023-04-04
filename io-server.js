@@ -36,7 +36,6 @@ io.on("connection", (socket) => {
   });
 });
 
-
 server.listen(socketPort, () => {
   console.log(`socket server is running on port ${socketPort}`);
 });

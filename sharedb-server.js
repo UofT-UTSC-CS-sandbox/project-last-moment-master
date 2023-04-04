@@ -3,25 +3,49 @@ const express = require("express");
 const ShareDB = require("sharedb");
 const WebSocket = require("ws");
 const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
+const dotenv = require("dotenv");
+const ShareDBMongo = require("sharedb-mongo");
 
-const backend = new ShareDB();
+dotenv.config();
+
+const db = new ShareDBMongo(process.env.MONGODB_CONNECTION);
+ShareDB.types.register(richText.type);
+const backend = new ShareDB({ db });
+const connection = backend.connect();
 
 const port = process.env.API_PORT || 3002;
 
 createDoc(startServer);
 // Create initial document then fire callback
-function createDoc(callback) {
-  var connection = backend.connect();
-  var doc = connection.get("examples", "textarea");
+function createDoc(roomId, callback) {
+  // var doc = connection.get(roomId, "textarea");
+  if (!roomId || roomId.trim() === "") {
+    console.error("Invalid room ID");
+    callback(true);
+    return;
+  }
+
+  var doc = connection.get(roomId, "textarea");
+
   doc.fetch(function (err) {
     if (err) throw err;
     if (doc.type === null) {
       doc.create([{ content: [] }], callback);
       return;
     }
-    callback();
+    callback(false);
   });
 }
+
+const deleteDoc = async (roomId, callback) => {
+  const doc = connection.get(roomId, "textarea");
+  const conn = await mongoose
+    .createConnection(process.env.MONGODB_CONNECTION)
+    .asPromise();
+  await conn.dropCollection(`textarea_${roomId}`);
+  await conn.close();
+  return callback();
+};
 
 function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
@@ -40,3 +64,7 @@ function startServer() {
     console.log(`Sharedb Server listening on port ${port}`)
   );
 }
+
+startServer();
+
+module.exports = { createDoc, deleteDoc, test };
