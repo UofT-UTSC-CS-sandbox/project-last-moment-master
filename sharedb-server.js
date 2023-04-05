@@ -3,16 +3,23 @@ const express = require("express");
 const ShareDB = require("sharedb");
 const WebSocket = require("ws");
 const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
+const dotenv = require("dotenv");
+const ShareDBMongo = require("sharedb-mongo");
 
-const backend = new ShareDB();
+dotenv.config();
+
+const db = new ShareDBMongo(process.env.MONGODB_CONNECTION);
+const backend = new ShareDB({ db });
+const connection = backend.connect();
 
 const port = process.env.API_PORT || 3002;
 
 createDoc(startServer);
+
 // Create initial document then fire callback
 function createDoc(callback) {
-  var connection = backend.connect();
-  var doc = connection.get("examples", "textarea");
+  var doc = connection.get("code", "textarea");
+
   doc.fetch(function (err) {
     if (err) throw err;
     if (doc.type === null) {

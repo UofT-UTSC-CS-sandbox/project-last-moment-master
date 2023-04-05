@@ -9,6 +9,7 @@ const authConfig = require("./src/auth_config.json");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const axios = require("axios");
+const roomRoutes = require("./routes/room");
 
 const app = express();
 
@@ -66,11 +67,7 @@ app.get("/api/external", checkJwt, (req, res) => {
   });
 });
 
-app.get("/api/codeViewId", checkJwt, (req, res) => {
-  res.send({
-    id: "examples",
-  });
-});
+app.use("/api/rooms", roomRoutes);
 
 app.post("/api/execute", checkJwt, (req, res) => {
   const value = Buffer.from(req.body.code, "utf-8");
