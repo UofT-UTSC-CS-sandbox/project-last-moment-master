@@ -1,20 +1,21 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Alert } from "reactstrap";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import { getConfig } from "../config";
 import sharedb from "sharedb/lib/client";
 import Loading from "../components/Loading";
 import CodeArea from "../components/CodeArea";
-import DescArea from "../components/DescArea";
 import CodeViewFooter from "../components/CodeViewFooter";
 import VideoChat from "../components/VideoChat";
+import roomAPI from "../service/room";
 
-const port = process.env.API_PORT || 3002;
-const socket = new WebSocket(`ws://localhost:${port}`);
-const connection = new sharedb.Connection(socket);
+const port = 3002;
+let socket;
+let connection;
+let doc;
+// var codeRoomId;
 
 export const ExternalApiComponent = () => {
-  const { apiOrigin = "http://localhost:3001" } = getConfig();
+  // const { apiOrigin = "http://localhost:3001" } = getConfig();
 
   const [state, setState] = useState({
     showResult: false,
@@ -23,47 +24,45 @@ export const ExternalApiComponent = () => {
   });
   const [content, setContent] = useState("");
   const [codeRoomId, setCodeRoomId] = useState("");
-  const docRef = React.useRef(null);
+  const [owner, setOwner] = useState("");
+  //use to control join room button
+  const [disable, setDisable] = useState(false);
+  // const [doc, setDoc] = useState();
 
-  const { getAccessTokenSilently, loginWithPopup, getAccessTokenWithPopup } =
-    useAuth0();
-
-  const callApi = useCallback(async () => {
-    const token = await getAccessTokenSilently();
-    const response = await fetch(`${apiOrigin}/api/codeViewId`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const responseData = await response.json();
-    return responseData.id;
-  }, [getAccessTokenSilently, apiOrigin]);
+  const { loginWithPopup, getAccessTokenWithPopup } = useAuth0();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setCodeRoomId(await callApi());
-      const doc = connection.get(codeRoomId, "textarea");
-      doc.subscribe((err) => {
-        if (err) throw err;
-        setContent(doc.data.content);
-      });
-      doc.on("op", () => {
-        setContent(doc.data.content);
-      });
-      docRef.current = doc;
-      return () => {
-        if (docRef.current) {
-          docRef.current.destroy();
-        }
-      };
+    if(disable){
+      socket = new WebSocket(`ws://localhost:${port}`);
+      connection = new sharedb.Connection(socket);
+    }
+  }, [disable]);
+
+  useEffect(() => {
+    const onUnload = (e) => {
+      e.preventDefault();
+      handleLeaveRoom();
     };
-    return fetchData();
-  }, [callApi]);
+  
+    window.addEventListener("beforeunload", onUnload);
+    window.addEventListener("unload", onUnload);
+  
+    return () => {
+      window.removeEventListener("beforeunload", onUnload);
+      window.removeEventListener("unload", onUnload);
+    };
+  }, []);  
 
   const handleChange = (value) => {
-    docRef.current.submitOp([
-      { p: ["content"], ld: docRef.current.data[0], li: value },
-    ]);
+    if(!connection || connection === undefined){
+      socket = new WebSocket(`ws://localhost:${port}`);
+      connection = new sharedb.Connection(socket);
+    }
+    doc = connection.get("coderooms", codeRoomId);
+    console.log(codeRoomId, doc);
+    doc.submitOp([{ p: ["content"], ld: doc.data[0], li: value }], (err) => {
+      if (err) throw err;
+    });
     setContent(value);
   };
 
@@ -102,6 +101,126 @@ export const ExternalApiComponent = () => {
     fn();
   };
 
+  const handleCreateRoom = async () => {
+    setDisable(true);
+    roomAPI
+      .createRoom(owner)
+      .then((res) => {
+        setCodeRoomId(res.data._id);
+        if(!connection || connection === undefined){
+          socket = new WebSocket(`ws://localhost:${port}`);
+          connection = new sharedb.Connection(socket);
+        }
+        // setDoc(connection.get("coderooms", codeRoomId));
+        doc = connection.get("coderooms", res.data._id);
+        doc.on("op", () => {
+          setContent(doc.data.content);
+        });
+        doc.subscribe((err) => {
+          if (err) throw err;
+          // setDoc(doc);
+        });
+        console.log(doc);
+        return;
+      }).catch((error) => {
+        setDisable(false);
+        alert(error);
+        throw error;
+      });
+  };
+
+  const handleJoinRoom = async () => {
+    setDisable(true);
+    roomAPI
+      .joinRoom(codeRoomId, owner)
+      .then(async (res) => {
+        setCodeRoomId(res.data._id);
+        // codeRoomId = res.data._id;
+        if(!connection || connection === undefined){
+          socket = new WebSocket(`ws://localhost:${port}`);
+          connection = new sharedb.Connection(socket);
+        }
+        // setDoc(connection.get("coderooms", codeRoomId));
+        doc = await connection.get("coderooms", res.data._id);
+        doc.on("op", () => {
+          setContent(doc.data.content);
+        });
+        doc.on("load", () => {
+          setContent(doc.data.content);
+          console.log(doc.data);
+          console.log("load");
+        });
+        doc.on("create", () => {
+          setContent(doc.data.content);
+          console.log(doc.data);
+          console.log("create");
+        });
+        doc.subscribe((err) => {
+          if (err) {
+            setDisable(false);
+            throw err;
+          }
+        });
+        return () => {
+          setDisable(false);
+          if (doc) {
+            doc.destroy();
+          }
+        };
+      }).catch((error) => {
+        setDisable(false);
+        alert(error);
+        throw error;
+      }); 
+  };
+
+  const handleLeaveRoom = async () => {
+    roomAPI
+      .leaveRoom(codeRoomId, owner)
+      .then((res) => {
+        // setCodeRoomId("");
+        setContent("");
+        roomAPI
+          .getRoom(codeRoomId)
+          .then((res2) => {
+            if (!res2.data.owner) {
+              handleDeleteRoom();
+            }
+            setDisable(false);
+            setCodeRoomId("");
+          })
+          .catch((error) => {
+            alert(error);
+            throw error;
+          });
+        return () => {
+          setDisable(false);
+          if (doc) {
+            doc.destroy();
+          }
+        };
+      });
+  };
+
+  const handleDeleteRoom = async () => {
+    roomAPI
+      .deleteRoom(codeRoomId, owner)
+      .then((res) => {
+        setContent("");
+        setDisable(false);
+        setCodeRoomId("");
+        return () => {
+          if (doc) {
+            doc.destroy();
+          }
+        };
+      }).catch((error) => {
+        setDisable(true);
+        alert(error);
+        throw error;
+      });
+  };
+
   return (
     <div className="mt-24">
       <div className="mb-5">
@@ -131,21 +250,61 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
       </div>
-      <VideoChat />
-      <div style={{ position: "relative" }}>
-        <div className="mt-10" style={{ display: "flex" }}>
-          <div style={{ flex: 3, overflow: "auto" }}>
-            <CodeArea value={content} onChange={handleChange} />
-          </div>
-          <div style={{ flex: 2, overflow: "auto" }}>
-            <DescArea />
+      {!disable && 
+        <div>
+          <input
+            type="text"
+            placeholder="please enter your name"
+            value={owner}
+            onChange={(e) => setOwner(e.target.value)}
+            className="mx-4 mt-10 sborder border-[#ccdcbe] rounded-md font-mono px-3 py-2 w-2/3 focus:outline-none focus:ring focus:border-[#a5c392] drop-shadow-xl"
+          />
+          <button 
+            className="bg-[#85ab70] hover:bg-[#527642] text-[#e1ecdb] font-bold rounded-lg px-6 py-3 drop-shadow-xl"
+            onClick={handleCreateRoom}
+          >
+            Create a Room
+          </button>
+          <input
+            type="text"
+            placeholder="enter a room ID"
+            value={codeRoomId}
+            onChange={(e) => setCodeRoomId(e.target.value)}
+            className="mx-4 mt-10 sborder border-[#ccdcbe] rounded-md font-mono px-3 py-2 w-2/3 focus:outline-none focus:ring focus:border-[#a5c392] drop-shadow-xl"
+          />
+          <button 
+            className="bg-[#85ab70] hover:bg-[#527642] text-[#e1ecdb] font-bold rounded-lg px-6 py-3 drop-shadow-xl"
+            onClick={handleJoinRoom}
+          >
+            Or enter a room
+          </button>
+        </div>}
+      {disable && <div>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <VideoChat />
+          <h2 className="text-xl font-bold text-[#ccdcbe] left-62">
+            roomId: {codeRoomId}
+          </h2>
+        </div>
+        <div style={{ position: "relative" }}>
+          <div className="mt-10" style={{ display: "flex" }}>
+            <div style={{ flex: 5, overflow: "auto" }}>
+              <CodeArea value={content} onChange={handleChange} />
+            </div>
+            <button
+              id="leave-room"
+              className="bg-[#e65757] hover:bg-[#d13131] text-[#e1ecdb] font-bold rounded-lg px-6 py-3 drop-shadow-xl fixed bottom-20 right-32"
+              onClick={handleLeaveRoom}
+            >
+              leave room
+            </button>
           </div>
         </div>
-      </div>
-      <CodeViewFooter value={content} />
-      <div className="result-block-container">
-        {state.showResult && <div></div>}
-      </div>
+        <CodeViewFooter value={content} />
+        <div className="result-block-container">
+          {state.showResult && <div></div>}
+        </div>
+      </div>}
     </div>
   );
 };

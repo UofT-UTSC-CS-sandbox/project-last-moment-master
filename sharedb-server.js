@@ -9,23 +9,16 @@ const ShareDBMongo = require("sharedb-mongo");
 dotenv.config();
 
 const db = new ShareDBMongo(process.env.MONGODB_CONNECTION);
-ShareDB.types.register(richText.type);
 const backend = new ShareDB({ db });
 const connection = backend.connect();
 
 const port = process.env.API_PORT || 3002;
 
 createDoc(startServer);
-// Create initial document then fire callback
-function createDoc(roomId, callback) {
-  // var doc = connection.get(roomId, "textarea");
-  if (!roomId || roomId.trim() === "") {
-    console.error("Invalid room ID");
-    callback(true);
-    return;
-  }
 
-  var doc = connection.get(roomId, "textarea");
+// Create initial document then fire callback
+function createDoc(callback) {
+  var doc = connection.get("code", "textarea");
 
   doc.fetch(function (err) {
     if (err) throw err;
@@ -33,26 +26,15 @@ function createDoc(roomId, callback) {
       doc.create([{ content: [] }], callback);
       return;
     }
-    callback(false);
+    callback();
   });
 }
-
-const deleteDoc = async (roomId, callback) => {
-  const doc = connection.get(roomId, "textarea");
-  const conn = await mongoose
-    .createConnection(process.env.MONGODB_CONNECTION)
-    .asPromise();
-  await conn.dropCollection(`textarea_${roomId}`);
-  await conn.close();
-  return callback();
-};
 
 function startServer() {
   // Create a web server to serve files and listen to WebSocket connections
   var app = express();
   app.use(express.static("static"));
   var server = http.createServer(app);
-
   // Connect any incoming WebSocket connection to ShareDB
   var wss = new WebSocket.Server({ server: server });
   wss.on("connection", function (ws) {
@@ -64,7 +46,3 @@ function startServer() {
     console.log(`Sharedb Server listening on port ${port}`)
   );
 }
-
-startServer();
-
-module.exports = { createDoc, deleteDoc, test };

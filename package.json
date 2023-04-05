@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.0.0",
+    "@auth0/auth0-spa-js": "^2.0.4",
     "@fortawesome/react-fontawesome": "github:fortawesome/react-fontawesome",
     "@monaco-editor/react": "^4.4.6",
     "@teamwork/websocket-json-stream": "^2.0.0",
@@ -35,8 +36,6 @@
     "mongoose": "^7.0.3",
     "morgan": "^1.9",
     "npm-run-all": "^4.1",
-    "os-browserify": "^0.3.0",
-    "path-browserify": "^1.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-draggable": "^4.4.5",

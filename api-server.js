@@ -9,7 +9,6 @@ const authConfig = require("./src/auth_config.json");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const axios = require("axios");
-const { Question } = require("./models/questionModel");
 const roomRoutes = require("./routes/room");
 
 const app = express();
@@ -68,14 +67,7 @@ app.get("/api/external", checkJwt, (req, res) => {
   });
 });
 
-// app.get("/api/codeViewId", checkJwt, (req, res) => {
-//   //TODO: get roomid or generate one
-//   res.send({
-//     id: "examples",
-//   });
-// });
-
-app.use("/api/rooms", checkJwt, roomRoutes);
+app.use("/api/rooms", roomRoutes);
 
 app.post("/api/execute", checkJwt, (req, res) => {
   const value = Buffer.from(req.body.code, "utf-8");
@@ -120,34 +112,6 @@ app.post("/api/execute", checkJwt, (req, res) => {
     .catch(function (error) {
       console.error(error);
     });
-});
-
-app.post("/api/question", (req, res) => {
-  if (req.question === undefined) {
-    res.status(400).send({ error: "No question provided" });
-  }
-  const question = new Question({
-    question: req.body.question,
-    createAt: Date.now(),
-    updateAt: Date.now(),
-  });
-
-  Question.create((err, question) => {
-    if (err) {
-      res.status(500).send({ error: err });
-    }
-    console.log(quersion);
-    res.status(200).send("question created");
-  });
-});
-
-app.get("/api/question/:id", checkJwt, (req, res) => {
-  Question.findById(req.params.id, (err, question) => {
-    if (err) {
-      res.status(500).send({ error: err });
-    }
-    res.status(200).send(question);
-  });
 });
 
 app.listen(port, () => console.log(`API Server listening on port ${port}`));
