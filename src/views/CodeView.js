@@ -15,8 +15,6 @@ let doc;
 // var codeRoomId;
 
 export const ExternalApiComponent = () => {
-  // const { apiOrigin = "http://localhost:3001" } = getConfig();
-
   const [state, setState] = useState({
     showResult: false,
     apiMessage: "",

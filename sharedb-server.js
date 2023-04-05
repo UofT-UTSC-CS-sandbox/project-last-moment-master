@@ -35,6 +35,7 @@ function startServer() {
   var app = express();
   app.use(express.static("static"));
   var server = http.createServer(app);
+
   // Connect any incoming WebSocket connection to ShareDB
   var wss = new WebSocket.Server({ server: server });
   wss.on("connection", function (ws) {
