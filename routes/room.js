@@ -20,7 +20,7 @@ router.post("/create", async (req, res) => {
       owner: owner,
       _id: _id,
     });
-    
+
     await room.save();
     return res.json(room.toObject());
   });
@@ -149,8 +149,8 @@ router.patch("/leave/:roomId", async (req, res) => {
     return res.status(404).send("Room not found");
   }
 
-  if(room.owner === user) {
-    room.owner, room.user = room.user, room.owner;
+  if (room.owner === user) {
+    room.owner, (room.user = room.user), room.owner;
     room.user = null;
     await room.save();
     return res.json(room.toObject());

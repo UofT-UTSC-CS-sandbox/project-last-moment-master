@@ -12,7 +12,6 @@ const port = 3002;
 let socket;
 let connection;
 let doc;
-// var codeRoomId;
 
 export const ExternalApiComponent = () => {
   const [state, setState] = useState({
@@ -25,12 +24,11 @@ export const ExternalApiComponent = () => {
   const [owner, setOwner] = useState("");
   //use to control join room button
   const [disable, setDisable] = useState(false);
-  // const [doc, setDoc] = useState();
 
   const { loginWithPopup, getAccessTokenWithPopup } = useAuth0();
 
   useEffect(() => {
-    if(disable){
+    if (disable) {
       socket = new WebSocket(`ws://localhost:${port}`);
       connection = new sharedb.Connection(socket);
     }
@@ -41,23 +39,22 @@ export const ExternalApiComponent = () => {
       e.preventDefault();
       handleLeaveRoom();
     };
-  
+
     window.addEventListener("beforeunload", onUnload);
     window.addEventListener("unload", onUnload);
-  
+
     return () => {
       window.removeEventListener("beforeunload", onUnload);
       window.removeEventListener("unload", onUnload);
     };
-  }, []);  
+  }, []);
 
   const handleChange = (value) => {
-    if(!connection || connection === undefined){
+    if (!connection || connection === undefined) {
       socket = new WebSocket(`ws://localhost:${port}`);
       connection = new sharedb.Connection(socket);
     }
     doc = connection.get("coderooms", codeRoomId);
-    console.log(codeRoomId, doc);
     doc.submitOp([{ p: ["content"], ld: doc.data[0], li: value }], (err) => {
       if (err) throw err;
     });
@@ -105,22 +102,20 @@ export const ExternalApiComponent = () => {
       .createRoom(owner)
       .then((res) => {
         setCodeRoomId(res.data._id);
-        if(!connection || connection === undefined){
+        if (!connection || connection === undefined) {
           socket = new WebSocket(`ws://localhost:${port}`);
           connection = new sharedb.Connection(socket);
         }
-        // setDoc(connection.get("coderooms", codeRoomId));
         doc = connection.get("coderooms", res.data._id);
         doc.on("op", () => {
           setContent(doc.data.content);
         });
         doc.subscribe((err) => {
           if (err) throw err;
-          // setDoc(doc);
         });
-        console.log(doc);
         return;
-      }).catch((error) => {
+      })
+      .catch((error) => {
         setDisable(false);
         alert(error);
         throw error;
@@ -133,25 +128,19 @@ export const ExternalApiComponent = () => {
       .joinRoom(codeRoomId, owner)
       .then(async (res) => {
         setCodeRoomId(res.data._id);
-        // codeRoomId = res.data._id;
-        if(!connection || connection === undefined){
+        if (!connection || connection === undefined) {
           socket = new WebSocket(`ws://localhost:${port}`);
           connection = new sharedb.Connection(socket);
         }
-        // setDoc(connection.get("coderooms", codeRoomId));
         doc = await connection.get("coderooms", res.data._id);
         doc.on("op", () => {
           setContent(doc.data.content);
         });
         doc.on("load", () => {
           setContent(doc.data.content);
-          console.log(doc.data);
-          console.log("load");
         });
         doc.on("create", () => {
           setContent(doc.data.content);
-          console.log(doc.data);
-          console.log("create");
         });
         doc.subscribe((err) => {
           if (err) {
@@ -165,39 +154,37 @@ export const ExternalApiComponent = () => {
             doc.destroy();
           }
         };
-      }).catch((error) => {
+      })
+      .catch((error) => {
         setDisable(false);
         alert(error);
         throw error;
-      }); 
+      });
   };
 
   const handleLeaveRoom = async () => {
-    roomAPI
-      .leaveRoom(codeRoomId, owner)
-      .then((res) => {
-        // setCodeRoomId("");
-        setContent("");
-        roomAPI
-          .getRoom(codeRoomId)
-          .then((res2) => {
-            if (!res2.data.owner) {
-              handleDeleteRoom();
-            }
-            setDisable(false);
-            setCodeRoomId("");
-          })
-          .catch((error) => {
-            alert(error);
-            throw error;
-          });
-        return () => {
-          setDisable(false);
-          if (doc) {
-            doc.destroy();
+    roomAPI.leaveRoom(codeRoomId, owner).then((res) => {
+      setContent("");
+      roomAPI
+        .getRoom(codeRoomId)
+        .then((res2) => {
+          if (!res2.data.owner) {
+            handleDeleteRoom();
           }
-        };
-      });
+          setDisable(false);
+          setCodeRoomId("");
+        })
+        .catch((error) => {
+          alert(error);
+          throw error;
+        });
+      return () => {
+        setDisable(false);
+        if (doc) {
+          doc.destroy();
+        }
+      };
+    });
   };
 
   const handleDeleteRoom = async () => {
@@ -212,7 +199,8 @@ export const ExternalApiComponent = () => {
             doc.destroy();
           }
         };
-      }).catch((error) => {
+      })
+      .catch((error) => {
         setDisable(true);
         alert(error);
         throw error;
@@ -248,7 +236,7 @@ export const ExternalApiComponent = () => {
           </Alert>
         )}
       </div>
-      {!disable && 
+      {!disable && (
         <div>
           <input
             type="text"
@@ -257,7 +245,7 @@ export const ExternalApiComponent = () => {
             onChange={(e) => setOwner(e.target.value)}
             className="mx-4 mt-10 sborder border-[#ccdcbe] rounded-md font-mono px-3 py-2 w-2/3 focus:outline-none focus:ring focus:border-[#a5c392] drop-shadow-xl"
           />
-          <button 
+          <button
             className="bg-[#85ab70] hover:bg-[#527642] text-[#e1ecdb] font-bold rounded-lg px-6 py-3 drop-shadow-xl"
             onClick={handleCreateRoom}
           >
@@ -270,39 +258,42 @@ export const ExternalApiComponent = () => {
             onChange={(e) => setCodeRoomId(e.target.value)}
             className="mx-4 mt-10 sborder border-[#ccdcbe] rounded-md font-mono px-3 py-2 w-2/3 focus:outline-none focus:ring focus:border-[#a5c392] drop-shadow-xl"
           />
-          <button 
+          <button
             className="bg-[#85ab70] hover:bg-[#527642] text-[#e1ecdb] font-bold rounded-lg px-6 py-3 drop-shadow-xl"
             onClick={handleJoinRoom}
           >
             Or enter a room
           </button>
-        </div>}
-      {disable && <div>
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <VideoChat />
-          <h2 className="text-xl font-bold text-[#ccdcbe] left-62">
-            roomId: {codeRoomId}
-          </h2>
         </div>
-        <div style={{ position: "relative" }}>
-          <div className="mt-10" style={{ display: "flex" }}>
-            <div style={{ flex: 5, overflow: "auto" }}>
-              <CodeArea value={content} onChange={handleChange} />
+      )}
+      {disable && (
+        <div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <VideoChat />
+            <h2 className="text-xl font-bold text-[#ccdcbe] left-62">
+              roomId: {codeRoomId}
+            </h2>
+          </div>
+          <div style={{ position: "relative" }}>
+            <div className="mt-10" style={{ display: "flex" }}>
+              <div style={{ flex: 5, overflow: "auto" }}>
+                <CodeArea value={content} onChange={handleChange} />
+              </div>
+              <button
+                id="leave-room"
+                className="bg-[#e65757] hover:bg-[#d13131] text-[#e1ecdb] font-bold rounded-lg px-6 py-3 drop-shadow-xl fixed bottom-20 right-32"
+                onClick={handleLeaveRoom}
+              >
+                leave room
+              </button>
             </div>
-            <button
-              id="leave-room"
-              className="bg-[#e65757] hover:bg-[#d13131] text-[#e1ecdb] font-bold rounded-lg px-6 py-3 drop-shadow-xl fixed bottom-20 right-32"
-              onClick={handleLeaveRoom}
-            >
-              leave room
-            </button>
+          </div>
+          <CodeViewFooter value={content} />
+          <div className="result-block-container">
+            {state.showResult && <div></div>}
           </div>
         </div>
-        <CodeViewFooter value={content} />
-        <div className="result-block-container">
-          {state.showResult && <div></div>}
-        </div>
-      </div>}
+      )}
     </div>
   );
 };

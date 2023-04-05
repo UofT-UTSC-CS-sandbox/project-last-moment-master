@@ -25,7 +25,7 @@ const deleteDoc = async (roomId, callback) => {
   // const doc = connection.get(roomId, "textarea");
   const doc = connection.get("coderooms", roomId);
   doc.del();
-  doc.submitOp([{p: "_delete"}]);
+  doc.submitOp([{ p: "_delete" }]);
   // const conn = await mongoose
   //   .createConnection(process.env.MONGODB_CONNECTION)
   //   .asPromise();
