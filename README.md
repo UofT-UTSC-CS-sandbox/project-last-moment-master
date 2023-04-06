@@ -55,6 +55,10 @@ I plan to implement CI/CD for an extra challenge and hope to earn more points.
 
 [Watch our presentation on YouTube](https://www.youtube.com/watch?v=e5UW5pq7tng)
 
+**Deployment:**
+
+- Will be updated as soona as possible!!
+
 **Description:**
 
 - The initialize loading of the page is a little bit slow. This can be solved by deleting cookies.
