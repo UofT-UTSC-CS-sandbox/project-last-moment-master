@@ -24,7 +24,7 @@ const VideoChat = () => {
 
   useEffect(() => {
     if (isopen) {
-      socket = io.connect("http://localhost:3003");
+      socket = io.connect("wss://skillvitrine.wlt.life:3003");
 
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: true })

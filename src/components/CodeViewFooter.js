@@ -5,7 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 export const CodeViewFooter = (props) => {
   const { value } = props;
 
-  const { apiOrigin = "http://localhost:3001" } = getConfig();
+  const { apiOrigin = "https://skillvitrine.wlt.life:3001" } = getConfig();
   const { getAccessTokenSilently } = useAuth0();
 
   const [state, setState] = useState({

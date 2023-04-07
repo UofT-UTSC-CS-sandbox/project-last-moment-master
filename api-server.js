@@ -10,13 +10,21 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const axios = require("axios");
 const roomRoutes = require("./routes/room");
+const https = require("https"),
+  fs = require("fs");
 
 const app = express();
+
+const options = {
+  key: fs.readFileSync("../skillvitrine.wlt.life.key"),
+  cert: fs.readFileSync("../skillvitrine.wlt.life_bundle.pem")
+};
 
 dotenv.config();
 const port = process.env.API_PORT || 3001;
 const appPort = process.env.SERVER_PORT || 3000;
-const appOrigin = authConfig.appOrigin || `http://localhost:${appPort}`;
+const appOrigin = `https://skillvitrine.wlt.life`;
+// const appOrigin = `https://skillvitrine.wlt.life:${appPort}`;
 
 const XRapidAPIKey = process.env.XRAPIKEY;
 const XRapidAPIHost = process.env.XRAPIHOST;
@@ -114,4 +122,5 @@ app.post("/api/execute", checkJwt, (req, res) => {
     });
 });
 
-app.listen(port, () => console.log(`API Server listening on port ${port}`));
+// app.listen(port, () => console.log(`API Server listening on port ${port}`));
+https.createServer(options, app).listen(port);

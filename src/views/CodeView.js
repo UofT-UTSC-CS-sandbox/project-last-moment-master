@@ -29,7 +29,7 @@ export const ExternalApiComponent = () => {
 
   useEffect(() => {
     if (disable) {
-      socket = new WebSocket(`ws://localhost:${port}`);
+      socket = new WebSocket(`wss://skillvitrine.wlt.life:${port}`);
       connection = new sharedb.Connection(socket);
     }
   }, [disable]);
@@ -51,7 +51,7 @@ export const ExternalApiComponent = () => {
 
   const handleChange = (value) => {
     if (!connection || connection === undefined) {
-      socket = new WebSocket(`ws://localhost:${port}`);
+      socket = new WebSocket(`wss://skillvitrine.wlt.life:${port}`);
       connection = new sharedb.Connection(socket);
     }
     doc = connection.get("coderooms", codeRoomId);
@@ -103,7 +103,7 @@ export const ExternalApiComponent = () => {
       .then((res) => {
         setCodeRoomId(res.data._id);
         if (!connection || connection === undefined) {
-          socket = new WebSocket(`ws://localhost:${port}`);
+          socket = new WebSocket(`wss://skillvitrine.wlt.life:${port}`);
           connection = new sharedb.Connection(socket);
         }
         doc = connection.get("coderooms", res.data._id);
@@ -129,7 +129,7 @@ export const ExternalApiComponent = () => {
       .then(async (res) => {
         setCodeRoomId(res.data._id);
         if (!connection || connection === undefined) {
-          socket = new WebSocket(`ws://localhost:${port}`);
+          socket = new WebSocket(`wss://skillvitrine.wlt.life:${port}`);
           connection = new sharedb.Connection(socket);
         }
         doc = await connection.get("coderooms", res.data._id);

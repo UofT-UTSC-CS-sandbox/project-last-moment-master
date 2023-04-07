@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const baseUrl = `${process.env.API_SERVICE_URL}/api`
-const baseUrl = "http://localhost:3001/api/rooms";
+const baseUrl = "https://skillvitrine.wlt.life:3001/api/rooms";
 
 const createRoom = async (owner) => {
   try {

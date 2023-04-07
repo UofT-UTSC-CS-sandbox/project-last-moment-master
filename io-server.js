@@ -1,8 +1,16 @@
 const express = require("express");
-const app = express();
-const server = require("http").createServer(app);
 const morgan = require("morgan");
 const helmet = require("helmet");
+const https = require("https"),
+  fs = require("fs");
+
+const options = {
+  key: fs.readFileSync("../skillvitrine.wlt.life.key"),
+  cert: fs.readFileSync("../skillvitrine.wlt.life_bundle.pem")
+};
+const app = express();
+
+const server = https.createServer(options, app);
 
 app.use(morgan("dev"));
 app.use(helmet());
