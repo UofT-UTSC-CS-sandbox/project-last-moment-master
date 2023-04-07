@@ -61,8 +61,8 @@ I plan to implement CI/CD for an extra challenge and hope to earn more points.
 
 **Description:**
 
-- The initialize loading of the page is a little bit slow. This can be solved by deleting cookies 
-and refresh the page.
+- The initialize loading of the page is a little bit slow. This can be solved by deleting cookies
+  and refresh the page.
 - After logging in, user can go to codeview, enter a name to create a room. Then user will be in the
   room, which allows share code editing.
 - The room id is shown on the above of the page, and the room id can be copied to invide the other
